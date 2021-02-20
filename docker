@@ -1,1 +1,133 @@
 
+
+step1
+1) launch instance
+2) connect with putty
+3) sudo su -----> move to root user
+4) yum update -y
+5) yum install docker -y
+6) systemctl start docker
+7) systemctl status docker
+
+step2
+creating docker file
+ 
+ 1) create dir   -----> create directory
+ 2) cd dir ----> enter into dir
+ 3) create hello.java file
+ 4) paste below data in Hello.java
+ 
+ class Hello{  
+public static void main(String[] args){  
+System.out.println("This is java app \n by using Docker");  
+}  
+}  
+
+5) create Dockerfile
+6) paste below data
+
+FROM java:8  
+COPY . /var/www/java  
+WORKDIR /var/www/java  
+RUN javac Hello.java  
+CMD ["java", "Hello"]  
+
+step3
+1) docker build -t java-app .
+
+step4
+1) docker login  ----> loging into docker-hub
+2) docker push dockerhubid/repo:tag
+
+step5
+1) docker pull jenkins/jenkins   ----> pulling jenkins 
+3) docker images                 ----> checking list for docker images
+4) docker run -itd --name=req-container-name -p 8081:8080 jenkins/jenkins
+5) docker run -d --restart=always --name=req-container-name -p 7878:8080 imagename ----> automatic
+5) docker ps
+6) docker exec -it containerid bin/bash  ----> entering into container
+7) cat /var/jenkins_home/secrets/initialAdminPassword  ------> copy the password
+8) paste the password in jenkins dash-bord
+
+step6
+1) docker pull nginx             ----> pulling nginx
+2) docker images                 ----> checking list for docker images
+3) docker run -itd --name=reqcontainer-name -p 81:80 nginx ----> creating container
+4) docker ps    
+5) docker exec -it container-id bin/bash    -----> entering into container
+6) ctrl+d   ------> exit from container
+
+step7
+1) docker network ls 
+2) docker network create required-name
+3) docker run -itd --name=req-container-name --network=created-network-name -p 8010:8080 jenkins/jenkins
+
+step8
+16) docker run -d --restart=always --name=ganeshjenkins -p 7878:8080 -v ganeshvolume:/var/jenkins_home imagename  ----> adding volume 
+
+step9
+1) docker commit -m required-commit-message containerid required-image-name:v1  ----> creating image from running container
+
+step10
+docker swarm:-docker swarm is container orchestration tool / container management tool.
+
+need to configure docker cluster and worker nodes.
+1)launch master instance and install docker
+2)launch worker instance and install docker and start docker
+3)docker swarm init -----> run this command in worker instance
+
+docker swarm join --token SWMTKN-1-541obbb1bt2syozhc5zvbcc29yf15pqfsvwmahf9x9grd1ekwd-blk3ynv2806vnq60vcyfeorln 10.0.100.239:2377
+4)to install the docker visualizer by using below command
+
+==========================================================================================================================================
+docker compose is  tool to run the multi-container applications.
+developers ,,,,we can not using this in prod envs
+
+install docker compose using below URL:
+https://docs.docker.com/compose/install/
+
+1) sudo curl -L "https://github.com/docker/compose/releases/download/1.28.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+2) sudo chmod +x /usr/local/bin/docker-compose
+3) sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+4) docker-compose --version
+
+mkdir composetst
+vi app.py ----
+create.txt word1 word2
+Dockerfile
+docker-compose.yml
+
+docker-compose up -d
+docker-compose down
+
+-----------------------------------------------------
+docker-compose test:
+https://docs.docker.com/compose/gettingstarted/
+
+command to run the docker compose
+docker-compose up -d
+docker-compose down
+
+
+=============================================================================================================================================================
+docker swarm:-
+docker swarm is container orchestration tool / container management tool.
+
+need to configure docker cluster and worker nodes.
+1) docker swarm init
+docker swarm join --token SWMTKN-1-128pxa0fgrbgdz8rk7qgpw1szdc2q03fwvmy903gaht5vg04tf-9r5m7wbww7r8dbq2c4mwxib51 10.70.1.23:2377 
+2) to install the docker visualizer by using below command.
+3) docker run -it -d -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock dockersamples/visualizer
+---> visualizer is used to view the running statuses of conatainer on both cluster and worker nodes.
+
+4)docker service create --name=veera1 -p 8012:8080 jenkins/jenkins  ----> 
+5)docker service create --name=veera2 --replicas=3 -p 8012:8080 jenkins/jenkins  ----> creating replicas
+6)docker service scale veera2=1   ----> auto scaling reducing load
+
+
+=================================================================================================================================================
+
+
+
+
+
