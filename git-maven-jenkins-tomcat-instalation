@@ -1,0 +1,106 @@
+
+CI and CD :
+1) created one VM with 2GB RAM and installed java -1.8 and GIT.
+====================================================================================================
+2) path to install jenkins
+https://www.jenkins.io/doc/book/installing/linux/#red-hat-centos
+========================================================================================================================================================================
+A) install jenkins
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+sudo yum upgrade
+sudo yum install jenkins java-1.8.0-openjdk-devel
+sudo systemctl daemon-reload
+
+3) sudo service jenkins restart
+4) jenkins default directory location: /var/lib/jenkins/
+5) jenkins log file location : /var/log/jenkins/jenkins.log
+ tail -900f jenkins.log to check the jenkins log.
+6) created one user in jenkins.
+=======================================================================================================================================================================
+B) Install maven 
+use below path to install Maven.
+https://maven.apache.org/download.cgi
+1) created one directory for maven unde /opt/ folder
+mkdir maven.
+2)download the maven package.
+wget https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+3) extract zip file using below command.
+tar -xvf apache-maven-3.6.3-bin.tar.gz
+4) maven default home direcoty path.
+/opt/maven/apache-maven-3.6.3
+5) need to set the maven environment variables to run the maven command.
+6) .bash_profile 
+need to enter below propertes in bash_profile.
+""export M2_HOME=/opt/maven/apache-maven-3.6.3/
+""export PATH=${M2_HOME}/bin:${PATH}
+7) [root@ip-10-70-1-154 ~]# mvn -version
+Apache Maven 3.6.3 (cecedd343002696d0abb50b32b541b8a6ba2883f)
+Maven home: /opt/maven/apache-maven-3.6.3
+Java version: 1.8.0_272, vendor: Red Hat, Inc., runtime: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.272.b10-1.amzn2.0.1.x86_64/jre
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "4.14.214-160.339.amzn2.x86_64", arch: "amd64", family: "unix"
+======================================================================================================================================================================================
+D) Install apache tomcat
+https://tomcat.apache.org/download-80.cgi
+create a newfolder and download the tomcat /opt/tomcat/
+extract zip file for tomcat
+1) tomcat default directory structure.
+/opt/tomcat/apache-tomcat-8.5.63
+2) tomcat main configuration file is server.xml
+need to change the tomcat default port like below.
+" <Connector port="7777" protocol="HTTP/1.1""
+wget https://downloads.apache.org/tomcat/tomcat-8/v8.5.63/bin/apache-tomcat-8.5.63.tar.gz
+ 
+3)nee to add below properties on tomcat-users.xml file.
+
+<tomcat-users>
+    <user username="admin" password="password" roles="manager-gui,admin-gui,manager-script"/>
+</tomcat-users>
+4) need to change the configuration to avoid the 403 forbidden error in tomcat.
+/opt/tomcat/apache-tomcat-8.5.63/webapps/manager/META-INF
+vi context.xml
+<!--  <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> -->
+
+4) start tomcat
+/opt/tomcat/apache-tomcat-8.5.63/bin/start.sh
+===========================================================================================================
+1) to integrate tomcat and jenkins need to install below plugin.
+https://github.com/ganesh321/DeVOps_Demo/blob/master/deploy.hpi
+
+==============================================
+2) need to enter maven path to jenkins to integrate with jenkins.
+go to global tool comfiguration and enter the maven path.
+/opt/maven/apache-maven-3.6.3
+=====================================================
+ mvn archetype:generate to create the default project structure to build the java application.
+ 
+ Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): 1743: 7
+Choose am.ik.archetype:mvc-1.0-blank-archetype version:
+1: 1.0.0-m01
+2: 1.0.0-m02
+Choose a number: 2: 1
+Downloading from central: https://repo.maven.apache.org/maven2/am/ik/archetype/mvc-1.0-blank-archetype/1.0.0-m01/mvc-1.0-blank-archetype-1.0.0-m01.pom
+Downloaded from central: https://repo.maven.apache.org/maven2/am/ik/archetype/mvc-1.0-blank-archetype/1.0.0-m01/mvc-1.0-blank-archetype-1.0.0-m01.pom (2.6 kB at 71 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/am/ik/archetype/mvc-1.0-blank-archetype/1.0.0-m01/mvc-1.0-blank-archetype-1.0.0-m01.jar
+Downloaded from central: https://repo.maven.apache.org/maven2/am/ik/archetype/mvc-1.0-blank-archetype/1.0.0-m01/mvc-1.0-blank-archetype-1.0.0-m01.jar (4.0 kB at 102 kB/s)
+Define value for property 'groupId': veera_software_development
+Define value for property 'artifactId': user_login_service
+Define value for property 'version' 1.0-SNAPSHOT: : 1
+Define value for property 'package' veera_software_development: : war
+
+=======================================================================================================
+ git init
+ ll
+ git add *
+ git commit -m "commiting code to git hub"
+ git remote add origin https://github.com/ganesh321/devops_CI_CD.git
+ git push -u origin
+ git push -u origin -u master
+ ===========================================
+ need to add the maven plugin from jenkins available plugins.
+ 
+CI_CD.txt
+Displaying CI_CD.txt.
