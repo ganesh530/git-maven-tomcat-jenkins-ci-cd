@@ -1,0 +1,25 @@
+aws create infrastructure using commands:=
+aws ec2 create-vpc --cidr-block 10.77.0.0/16
+aws ec2 modify-vpc-attribute --vpc-id vpc-0f2bc079ae925b3d7 --enable-dns-hostnames "{\"Value\":true}"	
+aws ec2 create-subnet --vpc-id vpc-0f2bc079ae925b3d7 --cidr-block 10.77.1.0/24
+aws ec2 modify-subnet-attribute --subnet-id subnet-0fe114b64a3b3c016 --map-public-ip-on-launch
+aws ec2 create-internet-gateway
+aws ec2 attach-internet-gateway --internet-gateway-id igw-00b32211ba176dfa5 --vpc-id vpc-0f2bc079ae925b3d7
+aws ec2 create-route-table --vpc-id vpc-0f2bc079ae925b3d7
+aws ec2 create-route --route-table-id rtb-0f6448d9a568eafd8 --destination-cidr-block 0.0.0.0/0 --gateway-id igw-00b32211ba176dfa5
+aws ec2 associate-route-table --route-table-id rtb-0f6448d9a568eafd8 --subnet-id subnet-0fe114b64a3b3c016
+----------------------------------------------------------
+#!/bin/bash
+aws ec2 create-vpc --cidr-block 10.80.0.0/16 > vpc.txt
+VPC=$(cat vpc.txt | grep -i VpcId | cut -d ":" -f 2 | tr -d '"' | tr -d ',')
+aws ec2 modify-vpc-attribute --vpc-id $VPC --enable-dns-hostnames "{\"Value\":true}"	
+aws ec2 create-subnet --vpc-id $VPC --cidr-block 10.80.1.0/24 > subnet.txt
+SUBNET=$(cat subnet.txt | grep -i SubnetId | cut -d ":" -f 2 | tr -d '"' | tr -d ',')
+aws ec2 modify-subnet-attribute --subnet-id $SUBNET --map-public-ip-on-launch
+aws ec2 create-internet-gateway > internet.txt
+INTERNET=$(cat internet.txt | grep -i InternetGatewayId | cut -d ":" -f 2 | tr -d '"' | tr -d ',')
+aws ec2 attach-internet-gateway --internet-gateway-id $INTERNET --vpc-id $VPC
+aws ec2 create-route-table --vpc-id $VPC > route.txt
+ROUTE=$(cat route.txt | grep -i RouteTableId | cut -d ":" -f 2 | tr -d ',' | tr -d '"')
+aws ec2 create-route --route-table-id $ROUTE --destination-cidr-block 0.0.0.0/0 --gateway-id $INTERNET
+aws ec2 associate-route-table --route-table-id $ROUTE --subnet-id $SUBNET
