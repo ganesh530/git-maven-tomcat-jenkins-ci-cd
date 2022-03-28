@@ -1,5 +1,42 @@
-hai
-hello
-welcome
-how are you
-
+git installation
+------------------
+yum install git -y  --->installing git
+mkdir ganesh   ---> creating directory
+cd ganesh    ---> moving into dir path
+gitinit    ----> initializing empty repository
+ls -la    ---> hidden file list
+git config --global user.name "ganesh"   --->giving username
+git config --global user.email "ganesh5a0321@gmail.com"   ---> giving email address
+git config --list ---checking configured list
+touch file1 ---> creating file
+vi file1     ---> editing the content
+git status   ----> checking the file status 
+git add file1  ----> adding file
+git status 
+git commit -m "commit message"  ---> commiting changes
+git log   ---> checking log
+git show commitid   --->  checking commitid
+git log -2 ---> will show last two commits
+git log --oneline  --->getting data in one line
+git log --author=username  ---> will show only perticular commits
+git log --since=2022-02-03  ---> will show perticular date commits
+git reset --soft commitid  ---> resetting cganges local to staging/index area
+git reset head filename    ---> resetting changes from staging/index area to work sapce
+git reset --mixed commitid ---> resetting cganges local to work space
+create github a/c
+create repository
+copy the repository url
+git clone repository url pastre here
+cd repository
+git push
+give git hub userid & passwd
+git pull ----> getting data from github repository
+git branch ---->listing branches
+git branch ganesh ---> creating branch
+git checkout ganesh ---> moving into branch
+git branch -D branchname ---> deleting branch
+git merge master1 ---> merging data from branches
+cat f1 --->creating/reading content
+cat >f1 --->writing data in command prompt (we have enter ctl+d to save the data)
+cat >>f1 --->appending data without any previous changes and adding new data
+git push origin -d master1   ---> deleting repository 
